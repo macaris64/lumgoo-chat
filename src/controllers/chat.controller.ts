@@ -3,17 +3,17 @@ import {APIError} from "../utils/errors";
 import {gptManager} from "../managers/gpt";
 
 export const createGPT = async (req: Request, res: Response, next: NextFunction) => {
-    const { name } = req.body;
+    const { name, systemMessage } = req.body;
     try {
-        if (!name) {
-            throw new APIError(400, 'Missing name parameter');
+        if (!name || !systemMessage) {
+            throw new APIError(400, "Missing required parameters");
         }
-        const gpt = gptManager.getGPT(name);
+        const gpt = await gptManager.getGPT(name);
         if (gpt) {
             throw new APIError(400, `GPT instance '${name}' already exists`);
         }
-        gptManager.createGPT(name);
-        res.send(`GPT instance '${name}' created`);
+        await gptManager.createGPT(name, systemMessage);
+        res.status(201).send({});
     } catch (error) {
         next(error);
     }
@@ -25,7 +25,7 @@ export const conversation = async (req: Request, res: Response, next: NextFuncti
     try {
         let currentMessage = initialMessage;
         for (const participant of participants) {
-            const gpt = gptManager.getGPT(participant);
+            const gpt = await gptManager.getGPT(participant);
             if (!gpt) {
                 throw new APIError(404, `GPT instance '${participant}' not found`);
             }

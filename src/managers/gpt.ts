@@ -1,15 +1,19 @@
 import {createGPTInstance, GPT} from "../models/gpt.model";
+import redisClient from "../utils/redisClient";
 
 class GPTManager {
-  private gptInstances: Map<string, GPT> = new Map();
-
-  createGPT(name: string): void {
-    const gpt = createGPTInstance(name);
-    this.gptInstances.set(name, gpt);
+  async createGPT(name: string, systemMessage: string): Promise<void> {
+    const gpt = createGPTInstance(name, systemMessage);
+    const gptSerialized = JSON.stringify(gpt);
+    await redisClient.set(name, gptSerialized)
   }
 
-  getGPT(name: string): GPT | undefined {
-    return this.gptInstances.get(name);
+  async getGPT(name: string): Promise<GPT | null> {
+    const gptSerialized = await redisClient.get(name);
+    if (!gptSerialized) {
+      return null;
+    }
+    return JSON.parse(gptSerialized) as GPT;
   }
 }
 

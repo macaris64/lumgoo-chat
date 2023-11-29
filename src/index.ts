@@ -1,7 +1,9 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import chatRouter from "./routes/chat.routes";
 import {errorHandler} from "./middlewares/error.middleware";
 
+dotenv.config();
 const app = express();
 const port = 3008;
 
