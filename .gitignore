@@ -39,3 +39,5 @@ npm-debug.log
 
 # Db
 data
+
+postgres_data
