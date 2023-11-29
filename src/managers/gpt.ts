@@ -13,7 +13,8 @@ class GPTManager {
     if (!gptSerialized) {
       return null;
     }
-    return JSON.parse(gptSerialized) as GPT;
+    const gptData = JSON.parse(gptSerialized) as GPT;
+    return createGPTInstance(gptData.name, gptData.systemMessage);
   }
 }
 

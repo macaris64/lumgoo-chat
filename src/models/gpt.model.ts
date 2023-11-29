@@ -16,6 +16,8 @@ export function createGPTInstance(instanceName: string, instanceSystemMessage: s
         systemMessage: string = instanceSystemMessage;
         name: string = instanceName;
         async sendMessage(message: string): Promise<string> {
+            console.log("Your message", message)
+            console.log("System message", this.systemMessage)
             let response = null;
             try {
                 response = await openaiApi.chat.completions.create({
@@ -28,7 +30,6 @@ export function createGPTInstance(instanceName: string, instanceSystemMessage: s
                     max_tokens: 3000,
                 });
             } catch (error) {
-                console.log(error)
                 throw new APIError(400, "Failed to call OpenAI");
             }
             try {
