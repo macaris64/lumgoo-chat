@@ -15,7 +15,7 @@ export function initUserModel(sequelize: Sequelize): void {
         },
         objectId: {
             type: new DataTypes.STRING(128),
-            allowNull: false,
+            allowNull: true,
         },
         username: {
             type: new DataTypes.STRING(128),
@@ -27,3 +27,13 @@ export function initUserModel(sequelize: Sequelize): void {
         sequelize, // passing the `sequelize` instance is required
     });
 }
+
+export const isParticipantUser = async (participantId: number): Promise<boolean> => {
+  try {
+    const user = await User.findByPk(participantId);
+    return !!user; // Returns true if user exists, false otherwise
+  } catch (error) {
+    console.error('Error checking participant type:', error);
+    throw error; // Rethrow the error for handling in the calling function
+  }
+};

@@ -2,7 +2,7 @@ import {DataTypes, Model, Sequelize} from 'sequelize';
 
 export class Thread extends Model {
     public id!: number;
-    public name!: string;
+    public title!: string;
 }
 
 export function initThreadModel(sequelize: Sequelize): void {
@@ -12,7 +12,7 @@ export function initThreadModel(sequelize: Sequelize): void {
             autoIncrement: true,
             primaryKey: true,
         },
-        name: {
+        title: {
             type: new DataTypes.STRING(128),
             allowNull: false,
         },
