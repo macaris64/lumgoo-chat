@@ -3,18 +3,20 @@ import {APIError} from "../utils/errors";
 
 export interface GPT {
     name: string;
+    movie: string;
     systemMessage: string;
     sendMessage(message: string): Promise<string>;
 }
 
-export function createGPTInstance(instanceName: string, instanceSystemMessage: string): GPT {
+export function createGPTInstance(instanceName: string, instanceMovie: string, instanceSystemMessage: string): GPT {
     // Implementation to create a new GPT instance with the given name.
     // This could involve setting up specific model parameters or API endpoints.
     const openaiApi = new OpenAI({apiKey: process.env.OPENAI_API_KEY})
 
     return <GPT>new class implements GPT {
-        systemMessage: string = instanceSystemMessage;
         name: string = instanceName;
+        movie: string = instanceMovie;
+        systemMessage: string = instanceSystemMessage;
         async sendMessage(message: string): Promise<string> {
             console.log("Your message", message)
             console.log("System message", this.systemMessage)

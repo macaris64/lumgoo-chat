@@ -3,16 +3,16 @@ import {APIError} from "../utils/errors";
 import {gptManager} from "../managers/gpt";
 
 export const createGPT = async (req: Request, res: Response, next: NextFunction) => {
-    const { name, systemMessage } = req.body;
+    const { name, movie, systemMessage } = req.body;
     try {
-        if (!name || !systemMessage) {
+        if (!name || !systemMessage || !movie) {
             throw new APIError(400, "Missing required parameters");
         }
         const gpt = await gptManager.getGPT(name);
         if (gpt) {
             throw new APIError(400, `GPT instance '${name}' already exists`);
         }
-        await gptManager.createGPT(name, systemMessage);
+        await gptManager.createGPT(name, movie, systemMessage);
         res.status(201).send({});
     } catch (error) {
         next(error);

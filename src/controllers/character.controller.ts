@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {APIError} from "../utils/errors";
 
 import {Character} from '../models/character.model';
+import {gptManager} from "../managers/gpt";
 
 export const createCharacter = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,6 +18,8 @@ export const createCharacter = async (req: Request, res: Response, next: NextFun
       if (existingCharacter) {
         throw new APIError(400, 'Character already exists');
       }
+      const systemMessage = await gptManager.generateSystemMessageForCharacter(movie, name);
+      await gptManager.createGPT(name, movie, systemMessage);
       newCharacter = await Character.create({name, movie});
       res.status(201).json(newCharacter);
   } catch (error) {
