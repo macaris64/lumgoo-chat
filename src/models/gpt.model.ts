@@ -1,5 +1,6 @@
 import {OpenAI} from 'openai';
 import {APIError} from "../utils/errors";
+import {GPT_MODEL_4} from "../utils/constants";
 
 export interface GPT {
     name: string;
@@ -27,7 +28,7 @@ export function createGPTInstance(instanceName: string, instanceMovie: string, i
                         { role: "system", content: this.systemMessage },
                         { role: "user", content: message }
                     ],
-                    model: 'gpt-3.5-turbo',
+                    model: GPT_MODEL_4,
                     response_format: {"type": "text"},
                     max_tokens: 3000,
                 });
